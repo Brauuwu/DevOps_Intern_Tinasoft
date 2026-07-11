@@ -1,0 +1,21 @@
+# Ví dụ Pipeline GitLab CI cơ bản để thực hành
+stages:
+  - build
+  - test
+  - push
+
+build_image:
+  stage: build
+  script:
+    - echo "Đang tiến hành build container image bằng Kaniko..."
+    # Lệnh thực thi Kaniko sẽ được điền ở đây khi thực hành
+
+test_app:
+  stage: test
+  script:
+    - echo "Đang chạy unit test cho ứng dụng..."
+
+push_harbor:
+  stage: push
+  script:
+    - echo "Đẩy image lên Harbor Container Registry..."

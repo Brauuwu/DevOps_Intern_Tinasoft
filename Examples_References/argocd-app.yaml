@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app-gitops
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/<your-username>/GitHub_Lab.git' # Thay thế link git của nhóm
+    targetRevision: HEAD
+    path: Tuan3_Kubernetes # Trỏ tới thư mục chứa manifest
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

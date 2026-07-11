@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <h1>DevOps Status Board</h1>
+        <p class="subtitle">Live infrastructure metrics for team practice.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>System Status</h3>
+                <div class="value"><span class="status-dot"></span><span id="status-text">Online</span></div>
+            </div>
+            <div class="card">
+                <h3>Active Pods</h3>
+                <div class="value" id="pods">12</div>
+            </div>
+            <div class="card">
+                <h3>CPU Load</h3>
+                <div class="value" id="cpu">24%</div>
+            </div>
+        </div>
+        <button onclick="simulateDeploy()">Simulate Deployment</button>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

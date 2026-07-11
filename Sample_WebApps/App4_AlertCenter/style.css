@@ -1,0 +1,144 @@
+:root {
+    --bg: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: #1e293b;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.btn-success {
+    background: #10b981;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-warning {
+    background: #f59e0b;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.btn-danger {
+    background: #ef4444;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.toast {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+.toast::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+}
+
+.toast.success::before {
+    background: #10b981;
+}
+
+.toast.warning::before {
+    background: #f59e0b;
+}
+
+.toast.danger::before {
+    background: #ef4444;
+}
+
+.toast-icon {
+    font-size: 1.5rem;
+}
+
+.toast-content h4 {
+    color: #1e293b;
+    font-size: 1.05rem;
+    margin-bottom: 5px;
+}
+
+.toast-content p {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.toast.fade-out {
+    animation: fadeOut 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}

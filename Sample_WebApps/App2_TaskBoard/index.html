@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Task Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Sprint Tasks</h1>
+        <button class="add-btn" onclick="addTask()">+ New Task</button>
+    </div>
+    <div class="board">
+        <div class="column" id="todo">
+            <div class="column-header">To Do (Click to move)</div>
+            <div class="task" onclick="moveTask(this)">
+                <div class="task-title">Write Dockerfile for API</div>
+                <div class="task-meta">Assignee: Hiếu</div>
+            </div>
+            <div class="task" onclick="moveTask(this)">
+                <div class="task-title">Setup ArgoCD</div>
+                <div class="task-meta">Assignee: Yến</div>
+            </div>
+        </div>
+        <div class="column" id="doing">
+            <div class="column-header">In Progress</div>
+            <div class="task" onclick="moveTask(this)" style="border-left-color: #3b82f6;">
+                <div class="task-title">Configure GitLab CI</div>
+                <div class="task-meta">Assignee: Xuân</div>
+            </div>
+        </div>
+        <div class="column" id="done">
+            <div class="column-header">Done</div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
