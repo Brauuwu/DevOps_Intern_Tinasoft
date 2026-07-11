@@ -19,15 +19,15 @@ Dự án cung cấp sẵn 2 thư mục tài nguyên đặc biệt để hỗ tr�
 
 Repository được chia thành các thư mục tương ứng với từng tuần thực tập:
 
-| Thời gian | Chủ đề | Mục tiêu / Hoạt động chính |
+| Lộ trình | Chủ đề thực hành | Mục tiêu (Checklist Phase) |
 | :--- | :--- | :--- |
-| **Tuần 1** (29/06 - 03/07) | `Tuan1_Linux_Git` | Tìm hiểu tổng quan DevOps, Linux, Bash Shell, Git. Cài đặt môi trường phát triển trên máy ảo sử dụng VMWare và làm quen quy trình Git. |
-| **Tuần 2** (06/07 - 10/07) | `Tuan2_Docker_Harbor` | Nghiên cứu Docker, Docker Compose, Dockerfile, Kaniko, Harbor. Thực hành container hóa và quản lý image. |
-| **Tuần 3** (13/07 - 17/07) | `Tuan3_Kubernetes` | Tìm hiểu Kubernetes (Pod, Deployment, Service, Ingress, ConfigMap, Secret). Triển khai app bằng YAML Manifest. |
-| **Tuần 4** (20/07 - 24/07) | `Tuan4_GitLabCI` | Xây dựng GitLab CI Pipeline tự động build, test, đóng gói bằng Kaniko và đẩy lên Harbor. |
-| **Tuần 5** (27/07 - 31/07) | `Tuan5_GitOps_ArgoCD` | Tìm hiểu GitOps, ArgoCD. Triển khai ứng dụng, đồng bộ manifest từ Git lên K8s. |
-| **Tuần 6** (03/08 - 07/08) | `Tuan6_CICD_EndToEnd` | Hoàn thiện quy trình CI/CD End-to-End. Tích hợp, kiểm thử toàn bộ hệ thống. |
-| **Tuần 7** (10/08 - 14/08) | `Tuan7_BaoCao` | Hoàn thiện báo cáo thực tập, thảo luận nhóm và chuẩn bị thuyết trình. |
+| **Tuần 1** | `Tuan1_Linux_Git` | Khởi động: Linux cơ bản, tự động hóa Bash Shell, thao tác Git & Tương tác mạng. |
+| **Tuần 2** | `Tuan2_Docker_Harbor` | **Phase 2:** Container hóa ứng dụng, viết Dockerfile, khái niệm Docker Daemon, Kaniko và Harbor Registry. |
+| **Tuần 3** | `Tuan3_Kubernetes` | **Phase 3:** Kiến trúc Cluster, viết YAML Manifest thủ công (Workloads, Network, Storage, Quota). |
+| **Tuần 4** | `Tuan4_GitLabCI` | **Phase 4:** Tự động hóa với GitLab CI Pipeline (Test, Kaniko build rootless, Caching). |
+| **Tuần 5** | `Tuan5_GitOps_ArgoCD` | **Phase 5:** Triết lý GitOps, cài đặt Application và xử lý đồng bộ tự động/rollback bằng ArgoCD. |
+| **Tuần 6** | `Tuan6_CICD_EndToEnd` | **Phase 6 (Capstone):** Demo Live quy trình Zero Touch Deploy, Production Gate (Approve thủ công) và Rollback. |
+| **Tuần 7** | `Tuan7_BaoCao` | Hoàn thiện báo cáo tổng kết, vẽ sơ đồ kiến trúc và Slide bảo vệ thực tập. |
 
 ---
 

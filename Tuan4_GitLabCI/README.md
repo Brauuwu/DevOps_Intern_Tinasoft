@@ -2,11 +2,15 @@
 
 **Thời gian:** 20/07 - 24/07
 
-## 🎯 Mục tiêu
-- Hiểu nguyên lý CI (Continuous Integration), tại sao phải test và build tự động ngay sau khi có code mới.
-- Thành thạo cú pháp cấu hình pipeline (GitLab CI `.gitlab-ci.yml` hoặc GitHub Actions).
-- Tích hợp công cụ **Kaniko** để build Docker image trong môi trường CI không có quyền root (Rootless / Docker-in-Docker).
-- Biết cách cấu hình Environment Variables bảo mật và tối ưu hóa thời gian chạy CI bằng cơ chế caching.
+## 🎯 Mục tiêu (Checklist Phase 4)
+Tự động hóa bước build, test, và đóng gói image — bước nối giữa code và registry.
+
+- **Khái niệm:** Nắm vững CI (Continuous Integration), khái niệm Pipeline, Stage, Job.
+- **Cấu hình:** Thành thạo cú pháp cấu trúc file `.gitlab-ci.yml`.
+- **Hạ tầng:** Hiểu cách hoạt động của GitLab Runner và các khái niệm Executor.
+- **Workflow:** Cấu hình chuẩn một Pipeline tự động: build → test → build image bằng Kaniko → push lên Harbor.
+- **Bảo mật:** Biết cách cấu hình Biến môi trường (Environment Variables), Secret/Variable trong GitLab CI.
+- **Tối ưu:** Cấu hình Cache và truyền dữ liệu (Artifact) giữa các job.
 
 ## 📝 Nhiệm vụ thực hành
 
@@ -41,7 +45,11 @@ echo "Chạy Unit Test thành công!"
 - Sử dụng block `rules` để quy định: Stage `build-and-push` chỉ chạy khi commit vào nhánh `main` hoặc khi có Tag, còn các nhánh phụ chỉ chạy `lint` và `test`.
 - Thử nghiệm tính năng `cache:` để lưu lại các dependencies (vd thư mục `node_modules` hoặc `.m2`) giúp các lần chạy sau nhanh hơn.
 
-**Bước 5: Thảo luận và Nộp bài**
+**Bước 5: Nộp bài (Output đánh giá)**
+
+> [!IMPORTANT]
+> **Yêu cầu bắt buộc để qua bài:** Viết pipeline CI hoàn chỉnh cho 1 project thực tế (như các app ở `Sample_WebApps`): tự động chạy test, build image bằng **Kaniko**, và push image lên Harbor với image tag tự sinh theo commit/branch (sử dụng biến `$CI_COMMIT_SHORT_SHA` hoặc biến môi trường tương tự).
+
 - Tự trigger pipeline trên branch của bạn. Tải log chạy pipeline (file text) bỏ vào thư mục cá nhân.
-- Ghi lại các cấu trúc đã áp dụng vào file `ci-notes.md`.
-- Commit và tạo PR. Nhóm sẽ chọn ra 1 bản CI tốt nhất làm nền tảng cho Tuần 6.
+- Ghi lại các kiến thức học được vào file `ci-notes.md`.
+- Commit và tạo PR. Nhóm sẽ đánh giá và chọn ra 1 bản CI tốt nhất làm nền tảng cho quy trình End-to-End ở Tuần 6.

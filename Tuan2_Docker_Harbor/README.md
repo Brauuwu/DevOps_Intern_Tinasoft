@@ -2,14 +2,14 @@
 
 **Thời gian:** 06/07 - 10/07
 
-## 🎯 Mục tiêu
-- Hiểu sâu sắc về kiến trúc Container, sự khác biệt giữa Container và Virtual Machine.
-- Đọc hiểu và thành thạo các chỉ thị trong `Dockerfile` (FROM, RUN, CMD, ENTRYPOINT, COPY, ENV, WORKDIR...).
-- Nắm vững các khái niệm cốt lõi của Docker: **Images, Containers, Volumes, Networks**.
-- Tối ưu hóa kích thước Docker image với kỹ thuật **Multi-stage build**.
-- Giới hạn tài nguyên (CPU/RAM) cấp cho Container.
-- Sử dụng `docker-compose` để thiết lập môi trường phát triển (Dev Environment) đa dịch vụ với các cấu hình nâng cao.
-- Quản lý vòng đời image, push/pull image an toàn, phân quyền với Harbor Container Registry.
+## 🎯 Mục tiêu (Checklist Phase 2)
+- **Khái niệm cơ bản:** Phân biệt Container vs VM, Image vs Container.
+- **Dockerfile:** Viết, build image và tối ưu hóa bằng kỹ thuật **Multi-stage build**.
+- **Docker Compose:** Chạy ứng dụng đa dịch vụ (Multi-container app, vd: Web + DB).
+- **Kiến trúc lõi:** Hiểu cách hoạt động của **Docker Daemon** và vì sao cần nó.
+- **Kaniko:** Nắm được khái niệm build image không cần Docker Daemon (lý do dùng trong CI/CD, khác biệt với `docker build`).
+- **Container Registry:** Hiểu khái niệm, nắm rõ thao tác push/pull image.
+- **Harbor Registry:** Dùng thử, tạo project, push image và cấu hình phân quyền cơ bản.
 
 ## 📝 Nhiệm vụ thực hành chuyên sâu
 Nội dung tuần này có rất nhiều khối lượng kiến thức. Mỗi cá nhân cần thực hiện tuần tự qua 8 bước dưới đây trong thư mục riêng của mình để làm chủ hoàn toàn Docker.
@@ -97,7 +97,17 @@ exit
    docker build -t <ten-cua-ban>-api:v1 .
    ```
 
-**Bước 6: Cấu trúc hệ thống hoàn chỉnh với Docker Compose**
+**Bước 6: Nghiên cứu lý thuyết lõi (Docker Daemon & Kaniko)**
+Trước khi sang bước tiếp theo, bạn cần đọc và nắm vững các khái niệm "xương sống" này để làm tiền đề cho hệ thống CI/CD sau này:
+1. **Docker Daemon là gì? Tại sao cần nó?**
+   - Khi bạn gõ lệnh `docker run` hay `docker build`, thực chất bạn chỉ đang dùng phần mềm client để gửi yêu cầu tới một service chạy ngầm gọi là **Docker Daemon** (`dockerd`).
+   - Daemon chịu trách nhiệm trực tiếp giao tiếp với Kernel của hệ điều hành để cấp phát tài nguyên, tạo Network, Volume và duy trì sự sống cho Container. Không có Daemon, lệnh `docker` vô tác dụng.
+2. **Kaniko là gì? Tại sao CI/CD lại cần Kaniko thay vì `docker build`?**
+   - Ở các tuần sau, khi cấu hình tự động CI/CD, các thao tác build image thường được chạy *ở bên trong* một container. Việc ép một Docker Daemon chạy bên trong một Docker Container (Docker-in-Docker) rất rủi ro về bảo mật và phức tạp.
+   - **Kaniko** ra đời để giải quyết việc này: Nó cho phép bạn build Docker image từ Dockerfile và push thẳng lên Registry **mà không cần sự tồn tại của Docker Daemon**.
+   - Hãy ghi nhớ sự khác biệt này, tuần 4 (GitLab CI) chúng ta sẽ trực tiếp sử dụng Kaniko!
+
+**Bước 7: Cấu trúc hệ thống hoàn chỉnh với Docker Compose**
 Trong thư mục cá nhân, tạo file `docker-compose.yml`. Khai báo cấu trúc hệ thống gồm 3 services liên kết với nhau:
 - `frontend`: Dùng lệnh `build:` trỏ vào thư mục `static-web`. Mở port 80.
 - `backend`: Dùng lệnh `build:` trỏ vào thư mục `app-nodejs`. Cấu hình biến môi trường (`environment`).
@@ -116,7 +126,7 @@ docker-compose logs -f
 > **Tương tác Mạng (Host - Container):** Sau khi `docker-compose` chạy thành công, port của container `frontend` (VD: port 80) đã được map ra ngoài máy ảo (VD: port 8080). 
 > Lúc này, bạn hãy mở trình duyệt web trên **máy thật** (Windows/Mac) và truy cập vào `http://<IP-may-ao>:8080`. Docker đã thực hiện port-forwarding (NAT) giúp traffic từ trình duyệt đâm xuyên vào tận container bên trong VM!
 
-**Bước 7: Quản trị Image với Harbor Registry**
+**Bước 8: Quản trị Image với Harbor Registry**
 - Đăng nhập Harbor (Thay địa chỉ bằng URL Harbor của nhóm):
 ```bash
 docker login <dia-chi-harbor> -u <username> -p <password>
@@ -130,7 +140,11 @@ docker tag <ten-cua-ban>-api:v1 <dia-chi-harbor>/<project-name>/<ten-cua-ban>-ap
 docker push <dia-chi-harbor>/<project-name>/<ten-cua-ban>-api:v1
 ```
 
-**Bước 8: Nộp bài**
+**Bước 9: Nộp bài (Output đánh giá)**
+
+> [!IMPORTANT]
+> **Yêu cầu bắt buộc để qua bài:** Bạn phải viết được Dockerfile multi-stage cho 1 app thật (như bài tập ở Bước 5), build thành công image và push thành công lên Harbor.
+
 - Lưu tất cả các lệnh nháp bạn gõ thành công vào file `docker-notes.md`.
 - Commit toàn bộ folder cá nhân bao gồm mã nguồn ứng dụng, `Dockerfile`, `docker-compose.yml`, `docker-notes.md`.
 - Chụp 2 bức ảnh: (1) Trình duyệt hiển thị web chạy từ docker-compose, (2) Giao diện Harbor hiển thị image bạn vừa push lên. Lưu ảnh vào Git.

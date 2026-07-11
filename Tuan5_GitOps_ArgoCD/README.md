@@ -2,10 +2,14 @@
 
 **Thời gian:** 27/07 - 31/07
 
-## 🎯 Mục tiêu
-- Nắm vững triết lý GitOps: Khai báo hệ thống dưới dạng mã, lưu trữ trên Git và mọi sự thay đổi hạ tầng đều phải thông qua Pull Request. Mọi thay đổi thao tác tay (CLI) đều bị chống lại.
-- Cài đặt và vận hành ArgoCD. Hiểu cơ chế Pull-based (tự động theo dõi Git và kéo bản cập nhật xuống Cluster).
-- Xử lý các trường hợp out-of-sync, Health Degraded và cách rollback ứng dụng một cách an toàn.
+## 🎯 Mục tiêu (Checklist Phase 5)
+Thay đổi cách nghĩ về deploy: không push trực tiếp lên cluster, mà khai báo trạng thái mong muốn trong Git và để công cụ tự đồng bộ.
+
+- **Lý thuyết:** Nắm vững khái niệm GitOps, phân biệt rõ sự khác biệt giữa CI/CD truyền thống (Push-based) và GitOps (Pull-based deploy).
+- **Cấu trúc Git:** Hiểu nguyên lý phân tách kho lưu trữ: App Repo (chứa Source Code) và Manifest/Config Repo (chứa cấu hình YAML).
+- **ArgoCD Cơ bản:** Cài đặt, nắm vững khái niệm Application, cấu hình Sync policy (Manual vs Auto).
+- **Vận hành:** Theo dõi trạng thái đồng bộ (sync), xử lý lỗi và thực hiện Rollback thông qua giao diện ArgoCD.
+- **Nâng cao (Tùy chọn):** Tìm hiểu và cấu hình ArgoCD Image Updater — công cụ tự động cập nhật tag image mới vào Git.
 
 ## 📝 Nhiệm vụ thực hành
 
@@ -60,6 +64,10 @@ kubectl edit deployment <tên-deploy>
 4. **Kịch bản 3 (Cập nhật phiên bản):** Sửa số `replicas: 5` trong file `deployment.yaml` trên Github, commit. ArgoCD sẽ phát hiện thay đổi và Scale Up tự động.
 5. **Kịch bản 4 (Rollback):** Nếu phiên bản lỗi, thao tác tính năng Rollback bằng giao diện ArgoCD hoặc bằng lệnh `git revert` trên mã nguồn.
 
-**Bước 6: Nộp bài**
-- Chụp 3 ảnh màn hình chứng minh các kịch bản phá hoại đã được tự động chữa lành.
-- Lưu vào thư mục cá nhân, Commit và tạo PR.
+**Bước 6: Nộp bài (Output đánh giá)**
+
+> [!IMPORTANT]
+> **Yêu cầu bắt buộc để qua bài:** Khởi tạo thành công 1 `Application` trên ArgoCD trỏ tới nhánh Manifest repository cá nhân. Tiến hành sửa đổi (vd: thay đổi tag image, số lượng replica) trong file YAML trên GitHub, và chụp màn hình chứng minh ArgoCD đã tự động dò tìm (sync) và apply thay đổi đó lên cluster thực tế.
+
+- Chụp các ảnh màn hình chứng minh quá trình tạo ArgoCD Application, các kịch bản phá hoại và quá trình tự chữa lành (sync).
+- Lưu các file cấu hình và hình ảnh vào thư mục cá nhân. Commit và tạo PR.
