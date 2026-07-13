@@ -21,13 +21,13 @@ Repository được chia thành các thư mục tương ứng với từng tuầ
 
 | Lộ trình | Chủ đề thực hành | Mục tiêu (Checklist Phase) |
 | :--- | :--- | :--- |
-| **Tuần 1** | `Tuan1_Linux_Git` | Khởi động: Linux cơ bản, tự động hóa Bash Shell, thao tác Git & Tương tác mạng. |
-| **Tuần 2** | `Tuan2_Docker_Harbor` | **Phase 2:** Container hóa ứng dụng, viết Dockerfile, khái niệm Docker Daemon, Kaniko và Harbor Registry. |
-| **Tuần 3** | `Tuan3_Kubernetes` | **Phase 3:** Kiến trúc Cluster, viết YAML Manifest thủ công (Workloads, Network, Storage, Quota). |
-| **Tuần 4** | `Tuan4_GitLabCI` | **Phase 4:** Tự động hóa với GitLab CI Pipeline (Test, Kaniko build rootless, Caching). |
-| **Tuần 5** | `Tuan5_GitOps_ArgoCD` | **Phase 5:** Triết lý GitOps, cài đặt Application và xử lý đồng bộ tự động/rollback bằng ArgoCD. |
-| **Tuần 6** | `Tuan6_CICD_EndToEnd` | **Phase 6 (Capstone):** Demo Live quy trình Zero Touch Deploy, Production Gate (Approve thủ công) và Rollback. |
-| **Tuần 7** | `Tuan7_BaoCao` | Hoàn thiện báo cáo tổng kết, vẽ sơ đồ kiến trúc và Slide bảo vệ thực tập. |
+| **Tuần 1** | [`Tuan1_Linux_Git`](./Tuan1_Linux_Git) | Khởi động: Linux cơ bản, tự động hóa Bash Shell, thao tác Git & Tương tác mạng. |
+| **Tuần 2** | [`Tuan2_Docker_Harbor`](./Tuan2_Docker_Harbor) | **Phase 2:** Container hóa ứng dụng, viết Dockerfile, khái niệm Docker Daemon, Kaniko và Harbor Registry. |
+| **Tuần 3** | [`Tuan3_Kubernetes`](./Tuan3_Kubernetes) | **Phase 3:** Kiến trúc Cluster, viết YAML Manifest thủ công (Workloads, Network, Storage, Quota). |
+| **Tuần 4** | [`Tuan4_GitLabCI`](./Tuan4_GitLabCI) | **Phase 4:** Tự động hóa với GitLab CI Pipeline (Test, Kaniko build rootless, Caching). |
+| **Tuần 5** | [`Tuan5_GitOps_ArgoCD`](./Tuan5_GitOps_ArgoCD) | **Phase 5:** Triết lý GitOps, cài đặt Application và xử lý đồng bộ tự động/rollback bằng ArgoCD. |
+| **Tuần 6** | [`Tuan6_CICD_EndToEnd`](./Tuan6_CICD_EndToEnd) | **Phase 6 (Capstone):** Demo Live quy trình Zero Touch Deploy, Production Gate (Approve thủ công) và Rollback. |
+| **Tuần 7** | [`Tuan7_BaoCao`](./Tuan7_BaoCao) | Hoàn thiện báo cáo tổng kết, vẽ sơ đồ kiến trúc và Slide bảo vệ thực tập. |
 
 ---
 

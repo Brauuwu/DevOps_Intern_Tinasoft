@@ -8,7 +8,9 @@
 
 Thay vì chỉ xuất dòng chữ "Hello World" nhàm chán, các bạn hãy đóng gói (containerize) các ứng dụng này để thấy hiệu ứng sinh động khi deploy lên cụm nhé!
 
-- **App1_Dashboard**: Giao diện bảng điều khiển DevOps phong cách Dark Mode (Phù hợp cho Hiếu).
-- **App2_TaskBoard**: Bảng quản lý tiến độ công việc Kanban tương tác được (Phù hợp cho Hoàng).
-- **App3_ServerMonitor**: Màn hình Terminal giả lập giám sát luồng log theo thời gian thực (Phù hợp cho Xuân).
-- **App4_AlertCenter**: Hệ thống giả lập gửi cảnh báo thông báo sự kiện (Phù hợp cho Yến).
+- **App1_Dashboard**: Giao diện bảng điều khiển DevOps (HTML/CSS/JS thuần).
+- **App2_TaskBoard**: Bảng quản lý tiến độ công việc Kanban tương tác được (HTML/CSS/JS thuần).
+- **App3_ServerMonitor**: Màn hình Terminal giả lập giám sát luồng log (HTML/CSS/JS thuần).
+- **App4_AlertCenter**: Hệ thống giả lập gửi cảnh báo thông báo sự kiện (HTML/CSS/JS thuần).
+- **App5_ReactJS_Frontend**: Ứng dụng Single Page Application viết bằng framework ReactJS (Khởi tạo qua Vite). *Gợi ý: Yêu cầu kỹ năng viết Dockerfile Multi-stage (Node.js build -> Nginx serve).*
+- **App6_SpringBoot_Backend**: Ứng dụng Java REST API Backend. *Gợi ý: Yêu cầu kỹ năng viết Dockerfile Multi-stage (Maven package -> JRE run).*

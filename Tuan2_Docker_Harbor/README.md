@@ -1,151 +1,256 @@
-# Tuần 2: Docker, Docker Compose, Dockerfile, Kaniko và Harbor
+# Tuần 2: Docker, Kaniko và Harbor (Deep Dive)
+
+*Điều hướng nhanh:* [⬅️ Tuần 1: Linux & Git](../Tuan1_Linux_Git/README.md) | [🏠 Trang chủ Repo](../README.md) | [Tuần 3: Kubernetes ➡️](../Tuan3_Kubernetes/README.md)
 
 **Thời gian:** 06/07 - 10/07
 
 ## 🎯 Mục tiêu (Checklist Phase 2)
-- **Khái niệm cơ bản:** Phân biệt Container vs VM, Image vs Container.
-- **Dockerfile:** Viết, build image và tối ưu hóa bằng kỹ thuật **Multi-stage build**.
-- **Docker Compose:** Chạy ứng dụng đa dịch vụ (Multi-container app, vd: Web + DB).
-- **Kiến trúc lõi:** Hiểu cách hoạt động của **Docker Daemon** và vì sao cần nó.
-- **Kaniko:** Nắm được khái niệm build image không cần Docker Daemon (lý do dùng trong CI/CD, khác biệt với `docker build`).
-- **Container Registry:** Hiểu khái niệm, nắm rõ thao tác push/pull image.
-- **Harbor Registry:** Dùng thử, tạo project, push image và cấu hình phân quyền cơ bản.
+Tự tay container hóa một ứng dụng thật từ số 0, thay vì chỉ gõ lệnh copy/paste. Nắm vững bản chất của việc đóng gói.
+
+- **Khái niệm cơ bản:** Hiểu sâu về Container Engine, Image vs Container, và cách Union File System (Overlay2) hoạt động.
+- **Dockerfile:** Nắm vững các chỉ thị (`FROM`, `RUN`, `CMD`, `ENTRYPOINT`, `COPY`, `ADD`) và kỹ thuật **Multi-stage build** để tối ưu hóa kích thước image.
+- **Docker Compose:** Cách gom nhóm nhiều container (ví dụ: Frontend + Backend + Database) chạy chung trong một mạng cục bộ (Docker Bridge Network).
+- **Docker Daemon:** Hiểu khái niệm socket `/var/run/docker.sock`, rủi ro bảo mật của Docker-in-Docker (DinD).
+- **Kaniko:** Cơ chế build image Rootless (không cần Docker Daemon), giải pháp lý tưởng cho môi trường Kubernetes/CI.
+- **Harbor:** Quản trị Private Container Registry, phân quyền dự án (RBAC), quét lỗ hổng bảo mật (Vulnerability Scanning).
+
+## 📚 Lý thuyết Cốt lõi (Under the Hood)
+1. **Docker Daemon là gì?** 
+   - Docker Daemon (`dockerd`) là một background service chạy với quyền `root` trên host. Nó chịu trách nhiệm giao tiếp với nhân Linux (Namespaces, cgroups) để tạo cách ly cho container. Khi bạn gõ `docker run`, Docker CLI thực chất chỉ gọi API đến Daemon qua Unix Socket (`/var/run/docker.sock`).
+   - Rủi ro: Nếu mount socket này vào một container, container đó có thể kiểm soát toàn bộ host. Đây là lý do chúng ta cần Kaniko trong môi trường CI/CD.
+2. **Layer Caching:**
+   - Mỗi lệnh `RUN`, `COPY`, `ADD` trong Dockerfile tạo ra một layer đọc-chỉ-đọc (Read-only). Docker sẽ cache các layer này. Nếu mã nguồn thay đổi, lệnh `COPY . .` bị vô hiệu hóa cache, kéo theo toàn bộ các lệnh bên dưới phải build lại.
+   - *Best Practice:* Luôn `COPY package.json` hoặc `pom.xml` và cài đặt thư viện trước khi `COPY` toàn bộ mã nguồn.
+3. **Kaniko hoạt động thế nào?**
+   - Kaniko bung trực tiếp Base Image ra file system (user space), chạy các lệnh trong Dockerfile, chụp lại ảnh (snapshot) sự thay đổi file system sau mỗi lệnh, rồi nén lại thành các layer đẩy thẳng lên Harbor mà không cần giao tiếp với Kernel thông qua Daemon.
 
 ## 📝 Nhiệm vụ thực hành chuyên sâu
-Nội dung tuần này có rất nhiều khối lượng kiến thức. Mỗi cá nhân cần thực hiện tuần tự qua 8 bước dưới đây trong thư mục riêng của mình để làm chủ hoàn toàn Docker.
 
-**Bước 1: Chuẩn bị Workspace**
-1. Checkout nhánh mới:
-```bash
-git checkout -b <ten-cua-ban>/tuan2-docker
-```
-2. **BẮT BUỘC:** Tạo một thư mục mang tên bạn (ví dụ: `hoang/`) bên trong thư mục `Tuan2_Docker_Harbor`. Chuyển vào thư mục cá nhân đó để làm việc.
+**Bước 1: Chuẩn bị thư mục cá nhân & Workspace**
+1. Nhánh làm việc: `git checkout -b <ten-cua-ban>/tuan2-docker`
+2. **BẮT BUỘC:** Tạo thư mục có tên bạn (ví dụ: `xuan/`) trong `Tuan2_Docker_Harbor`. Chuyển vào thư mục này để thực hành.
+3. Lựa chọn 1 ứng dụng trong thư mục `Sample_WebApps` ở thư mục gốc (Khuyến khích chọn các ứng dụng Framework như React hoặc Spring Boot để thực hành Multi-stage) và copy toàn bộ thư mục đó vào thư mục cá nhân của bạn.
 
-**Bước 2: Thực hành lệnh Docker CLI cơ bản & Quản lý tài nguyên**
-1. Kéo một image hệ điều hành:
+**Bước 2: Viết Dockerfile Multi-stage chuẩn công nghiệp**
+Bên trong thư mục mã nguồn vừa copy, tiến hành tạo file `Dockerfile`.
+*Yêu cầu khắt khe:* 
+- Image cuối cùng phải có kích thước dưới 50MB (đối với Frontend) hoặc dưới 250MB (đối với Backend).
+- Phải có ít nhất 2 stage: `builder` (chứa tool nặng như Node/Maven) và `production` (chỉ chứa Nginx/JRE).
+- Phải áp dụng Layer Caching (chỉ `npm install` hoặc `mvn dependency:go-offline` trước).
+
+**Cẩm nang Lệnh Docker Build & Run cơ bản:**
+Sau khi viết xong Dockerfile, hãy build thử trên máy local:
 ```bash
-docker pull ubuntu:22.04
+docker build -t my-app:v1.0 .
 ```
-2. Chạy một container tương tác, đồng thời giới hạn tài nguyên (RAM 512MB, CPU 50%) và thử chạy `apt update` bên trong:
+*(Giải thích cờ lệnh: `-t` dùng để đặt tên và tag cho image. Dấu `.` ở cuối mang ý nghĩa "Build image dựa trên Dockerfile nằm ở thư mục hiện hành context").*
+
+Chạy thử image vừa build thành một container độc lập:
 ```bash
-docker run -it --name my-ubuntu --memory="512m" --cpus="0.5" ubuntu:22.04 /bin/bash
+docker run -d -p 8080:80 --name my-running-app my-app:v1.0
 ```
-3. Sau khi `exit` khỏi container, kiểm tra danh sách container và thông tin chi tiết:
-```bash
-docker ps -a
-docker inspect my-ubuntu
+*(Giải thích cờ lệnh: `-d` (detach) chạy ngầm không chiếm Terminal. `-p 8080:80` bẻ khóa cổng mạng, lấy cổng 8080 của máy tính bạn nối vào cổng 80 của container. `--name` đặt tên cho dễ nhớ).*
+
+**Bước 3: Thực hành Local với Docker Compose**
+Tạo file `docker-compose.yml` để chạy ứng dụng vừa build cùng với một service giả lập (vd: Redis hoặc Nginx Load Balancer).
+```yaml
+version: '3.8'
+services:
+  myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    restart: always
 ```
-4. Xem lượng tài nguyên các container đang tiêu thụ theo thời gian thực (nhấn Ctrl+C để thoát):
+Chạy thử: `docker-compose up -d --build` và truy cập trình duyệt. Dùng `docker-compose logs -f` để theo dõi.
+
+**Bước 4: Trải nghiệm Kaniko (Giả lập CI)**
+Thay vì dùng `docker build`, hãy tập build bằng Kaniko để quen với môi trường CI/CD:
 ```bash
-docker stats
+docker run -v $(pwd):/workspace \
+  gcr.io/kaniko-project/executor:latest \
+  --context /workspace \
+  --dockerfile /workspace/Dockerfile \
+  --destination harbor.mycompany.com/myproject/myapp:1.0.0 \
+  --no-push # (Dùng flag này để test local nếu chưa có Harbor)
 ```
-5. Xem log và xóa container:
+*Giải thích:* Lệnh này mount thư mục code hiện tại vào container Kaniko, chỉ định nơi chứa Dockerfile và URL của Registry đích.
+
+**Bước 5: Vận hành Harbor Private Registry**
+1. Đăng nhập vào giao diện web Harbor do Leader cung cấp. Tạo một Project mới.
+2. Đăng nhập Docker CLI vào Harbor: `docker login harbor.mycompany.com`.
+3. Tag và push image của bạn lên Harbor:
 ```bash
-docker logs my-ubuntu
-docker rm -f my-ubuntu
+docker tag myapp:latest harbor.mycompany.com/myproject/myapp:v1
+docker push harbor.mycompany.com/myproject/myapp:v1
+```
+4. Kích hoạt tính năng **Vulnerability Scanning** trên Harbor để quét lỗ hổng bảo mật của image bạn vừa push.
+
+## 🛠️ Xử lý sự cố thường gặp (Troubleshooting)
+- **Lỗi `no space left on device`**: Chạy lệnh `docker system prune -a` để dọn dẹp các image/container không sử dụng (Cẩn thận lệnh này sẽ xóa sạch cache của Docker).
+- **Lỗi `denied: requested access to the resource is denied` khi push lên Harbor**: Bạn chưa cấu hình đúng tên miền Harbor trong tag image, hoặc chưa `docker login`.
+- **Lỗi Permission Denied trong Dockerfile**: Đảm bảo sử dụng chỉ thị `USER` trong Dockerfile để không chạy ứng dụng bằng quyền root (Security Best Practice).
+
+**Bước 6: Docker Networking Deep Dive**
+
+Hiểu mạng Docker là bước đệm quan trọng trước khi bước vào Kubernetes Networking.
+
+1. **Tạo Custom Bridge Network:** Mặc định Docker dùng mạng `bridge` có tên `docker0`. Nhưng trong thực tế, bạn nên tạo network riêng để các container giao tiếp qua tên DNS thay vì IP:
+
+```bash
+# Tạo mạng tùy chỉnh
+docker network create --driver bridge my-app-network
+
+# Chạy 2 container trên cùng mạng
+docker run -d --name web --network my-app-network nginx:alpine
+docker run -d --name api --network my-app-network nginx:alpine
+```
+*(Giải thích: Khi 2 container nằm chung 1 custom network, chúng có thể gọi nhau bằng tên container. Ví dụ: container `web` có thể `ping api` mà không cần biết IP. Đây là cơ chế DNS nội bộ của Docker, tương tự Service DNS trong Kubernetes).*
+
+2. **Kiểm tra kết nối mạng giữa các container:**
+
+```bash
+# Truy cập vào container web và ping container api
+docker exec -it web sh
+ping api -c 3
+wget -qO- http://api:80
+exit
 ```
 
-**Bước 3: Quản lý Dữ liệu với Docker Volumes (Persistent Data)**
-Mặc định dữ liệu trong container sẽ biến mất khi container bị xóa. Ta dùng Volume để lưu trữ vĩnh viễn.
-1. Tạo một Volume có tên (Named Volume):
+3. **Phân tích cấu trúc mạng:**
+
 ```bash
+# Xem chi tiết mạng (subnet, gateway, container nào đang tham gia)
+docker network inspect my-app-network
+
+# Liệt kê tất cả mạng Docker
+docker network ls
+```
+*(Giải thích: `inspect` trả về JSON chứa toàn bộ metadata của mạng, bao gồm danh sách container đang kết nối và dải IP được cấp phát. Kỹ năng đọc JSON output rất quan trọng khi debug).*
+
+4. **Thử nghiệm cô lập mạng (Network Isolation):** Tạo container trên mạng `bridge` mặc định và thử `ping` sang container trên `my-app-network`. Bạn sẽ thấy nó KHÔNG thể kết nối — đây chính là cơ chế **cô lập mạng** (Network Segmentation), một best practice về bảo mật.
+
+Dọn dẹp:
+```bash
+docker rm -f web api
+docker network rm my-app-network
+```
+
+**Bước 7: Docker Volume & Data Persistence**
+
+Container là **Ephemeral** (tạm thời) — khi container bị xóa, dữ liệu bên trong cũng mất. Volume giải quyết vấn đề này.
+
+1. **Named Volume vs Bind Mount:**
+
+```bash
+# Cách 1: Named Volume (Docker quản lý, dữ liệu nằm trong /var/lib/docker/volumes/)
 docker volume create my-data
+docker run -d --name db -v my-data:/var/lib/mysql mysql:8.0
+
+# Cách 2: Bind Mount (Gắn thư mục cụ thể từ máy host vào container)
+docker run -d --name web -v $(pwd)/html:/usr/share/nginx/html:ro nginx:alpine
 ```
-2. Chạy container Nginx và mount Volume này vào thư mục chứa code web:
+*(Giải thích: Named Volume phù hợp cho database — Docker quản lý lifecycle. Bind Mount phù hợp cho dev — bạn sửa code trên host, container cập nhật ngay. Flag `:ro` (read-only) ngăn container ghi ngược vào host, tăng bảo mật).*
+
+2. **Backup và Restore dữ liệu Volume:**
+
+Đây là kỹ năng thiết yếu trong vận hành Production:
 ```bash
-docker run -d -p 8082:80 --name web-volume -v my-data:/usr/share/nginx/html nginx:alpine
+# Backup: Mount volume cần backup vào 1 container tạm, nén và copy ra host
+docker run --rm -v my-data:/source -v $(pwd):/backup alpine \
+    tar czf /backup/my-data-backup.tar.gz -C /source .
+
+# Restore: Giải nén ngược lại vào volume
+docker run --rm -v my-data-restored:/target -v $(pwd):/backup alpine \
+    tar xzf /backup/my-data-backup.tar.gz -C /target
 ```
-3. Chui vào container, sửa nội dung web:
+*(Giải thích: Kỹ thuật này sử dụng một container Alpine tạm (flag `--rm` tự xóa sau khi chạy xong) như một "công nhân" trung gian để truy cập dữ liệu trong volume. Đây là pattern chuẩn trong Docker).*
+
+3. **Kiểm tra và quản lý Volume:**
+
 ```bash
-docker exec -it web-volume /bin/sh
-echo "<h1>Du lieu nay se khong bi mat!</h1>" > /usr/share/nginx/html/index.html
-exit
-```
-4. Xóa container `web-volume` và tạo một container mới (vd: `web-volume-2`), vẫn sử dụng lại volume `my-data`. Mở trình duyệt xem trang web, bạn sẽ thấy dòng chữ vừa tạo vẫn còn nguyên!
-5. **Thực hành Bind Mount:** Mount trực tiếp thư mục code hiện tại ở máy ảo của bạn vào container. Bất cứ khi nào bạn sửa code trên máy ảo, web sẽ cập nhật ngay lập tức:
-```bash
-docker run -d -p 8083:80 -v $(pwd):/usr/share/nginx/html nginx:alpine
+# Liệt kê tất cả volume
+docker volume ls
+
+# Xem thông tin chi tiết (vị trí lưu trữ trên host)
+docker volume inspect my-data
+
+# Dọn dẹp volume không sử dụng
+docker volume prune
 ```
 
-**Bước 4: Mạng trong Docker (Docker Network)**
-Để các container kết nối được với nhau, chúng cần chung một mạng.
-1. Tạo mạng riêng (Bridge network):
-```bash
-docker network create my-network
+**Bước 8: Tối ưu hóa Docker Image & Security Best Practices**
+
+Image nhẹ = build nhanh hơn, pull nhanh hơn, ít lỗ hổng bảo mật hơn.
+
+1. **Tạo file `.dockerignore`:** Giống `.gitignore`, file này ngăn Docker copy các file không cần thiết vào build context (giảm thời gian build đáng kể):
+
 ```
-2. Chạy một container Database (Redis) trong mạng đó:
-```bash
-docker run -d --name my-redis --network my-network redis:alpine
-```
-3. Chạy một container hệ điều hành Alpine khác cùng mạng, và dùng lệnh `ping` gọi trực tiếp tên của container Redis thay vì gọi IP:
-```bash
-docker run -it --network my-network alpine /bin/sh
-ping my-redis
-# Chú ý kết quả ping thành công nhờ cơ chế DNS nội bộ của Docker!
-exit
+# .dockerignore
+node_modules/
+.git/
+*.md
+*.log
+.env
+dist/
+coverage/
 ```
 
-**Bước 5: Tự đóng gói ứng dụng (Multi-stage build Dockerfile)**
-1. **Bài tập 1 (Web tĩnh):** Tạo folder `static-web`. Tự viết một trang `index.html`. Viết một `Dockerfile` đơn giản sử dụng `FROM nginx:alpine` và lệnh `COPY` để copy thư mục vào Nginx.
-2. **Bài tập 2 (Ứng dụng động & Multi-stage):** Tạo folder `app-nodejs`.
-   - Lên mạng tìm một đoạn code ExpressJS siêu ngắn tạo API trả về JSON (có dùng package.json).
-   - Viết `Dockerfile` chia làm 2 giai đoạn (stage):
-     - **Stage 1 (Build):** Dùng `node:18` làm base. Copy code, chạy `npm install` để tải thư viện.
-     - **Stage 2 (Production):** Dùng `node:18-alpine` siêu nhẹ làm base. Chỉ `COPY --from=0` thư mục code và node_modules từ stage 1 sang. Thiết lập `ENV PORT=3000` và `CMD ["node", "server.js"]`.
-   - Build image: 
-   ```bash
-   docker build -t <ten-cua-ban>-api:v1 .
-   ```
+2. **Phân tích Layer bằng `docker history`:**
 
-**Bước 6: Nghiên cứu lý thuyết lõi (Docker Daemon & Kaniko)**
-Trước khi sang bước tiếp theo, bạn cần đọc và nắm vững các khái niệm "xương sống" này để làm tiền đề cho hệ thống CI/CD sau này:
-1. **Docker Daemon là gì? Tại sao cần nó?**
-   - Khi bạn gõ lệnh `docker run` hay `docker build`, thực chất bạn chỉ đang dùng phần mềm client để gửi yêu cầu tới một service chạy ngầm gọi là **Docker Daemon** (`dockerd`).
-   - Daemon chịu trách nhiệm trực tiếp giao tiếp với Kernel của hệ điều hành để cấp phát tài nguyên, tạo Network, Volume và duy trì sự sống cho Container. Không có Daemon, lệnh `docker` vô tác dụng.
-2. **Kaniko là gì? Tại sao CI/CD lại cần Kaniko thay vì `docker build`?**
-   - Ở các tuần sau, khi cấu hình tự động CI/CD, các thao tác build image thường được chạy *ở bên trong* một container. Việc ép một Docker Daemon chạy bên trong một Docker Container (Docker-in-Docker) rất rủi ro về bảo mật và phức tạp.
-   - **Kaniko** ra đời để giải quyết việc này: Nó cho phép bạn build Docker image từ Dockerfile và push thẳng lên Registry **mà không cần sự tồn tại của Docker Daemon**.
-   - Hãy ghi nhớ sự khác biệt này, tuần 4 (GitLab CI) chúng ta sẽ trực tiếp sử dụng Kaniko!
-
-**Bước 7: Cấu trúc hệ thống hoàn chỉnh với Docker Compose**
-Trong thư mục cá nhân, tạo file `docker-compose.yml`. Khai báo cấu trúc hệ thống gồm 3 services liên kết với nhau:
-- `frontend`: Dùng lệnh `build:` trỏ vào thư mục `static-web`. Mở port 80.
-- `backend`: Dùng lệnh `build:` trỏ vào thư mục `app-nodejs`. Cấu hình biến môi trường (`environment`).
-- `database`: Sử dụng image có sẵn `redis:alpine`.
-**Yêu cầu nâng cao trong file Compose:**
-- Thêm `depends_on` cho `backend` để nó chỉ khởi chạy sau khi `database` chạy xong.
-- Thêm `restart: always` để container tự bật lại nếu bị crash.
-- Khai báo rõ ràng block `networks` và `volumes`.
-Chạy toàn bộ hệ thống ngầm và xem log:
 ```bash
-docker-compose up -d --build
-docker-compose logs -f
+# Xem từng layer và kích thước
+docker history my-app:v1.0
+
+# Xem đầy đủ lệnh tạo ra mỗi layer (không bị cắt ngắn)
+docker history --no-trunc my-app:v1.0
+```
+*(Giải thích: Mỗi dòng trong output tương ứng với 1 layer. Layer nào quá lớn, bạn nên tìm cách tối ưu lệnh RUN tương ứng trong Dockerfile. Tip: Gộp nhiều lệnh RUN thành 1 bằng `&&` để giảm số layer).*
+
+3. **Phân tích sâu Image bằng công cụ `dive` (Tùy chọn nâng cao):**
+
+```bash
+# Cài đặt dive (công cụ phân tích layer trực quan)
+# Trên Ubuntu:
+wget https://github.com/wagoodman/dive/releases/latest/download/dive_0.12.0_linux_amd64.deb
+sudo dpkg -i dive_0.12.0_linux_amd64.deb
+
+# Phân tích image
+dive my-app:v1.0
+```
+*(Công cụ `dive` hiển thị giao diện TUI cho bạn duyệt từng layer, xem file nào được thêm/sửa/xóa, và tính điểm hiệu quả (Efficiency Score) cho image).*
+
+4. **Chạy Container với Non-Root User (Security Hardening):**
+
+Việc chạy app bằng quyền `root` trong container là rủi ro bảo mật lớn. Thêm các dòng sau vào cuối Dockerfile:
+
+```dockerfile
+# Tạo user và group mới
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Chuyển quyền sở hữu thư mục app
+CHOWN appuser:appgroup /app
+
+# Đổi sang user không có quyền root
+USER appuser
 ```
 
-> [!TIP]
-> **Tương tác Mạng (Host - Container):** Sau khi `docker-compose` chạy thành công, port của container `frontend` (VD: port 80) đã được map ra ngoài máy ảo (VD: port 8080). 
-> Lúc này, bạn hãy mở trình duyệt web trên **máy thật** (Windows/Mac) và truy cập vào `http://<IP-may-ao>:8080`. Docker đã thực hiện port-forwarding (NAT) giúp traffic từ trình duyệt đâm xuyên vào tận container bên trong VM!
+5. **Healthcheck trong Dockerfile:** Cho Docker tự kiểm tra sức khỏe container:
 
-**Bước 8: Quản trị Image với Harbor Registry**
-- Đăng nhập Harbor (Thay địa chỉ bằng URL Harbor của nhóm):
-```bash
-docker login <dia-chi-harbor> -u <username> -p <password>
+```dockerfile
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
 ```
-- Đổi tên tag image theo đúng chuẩn format của Registry:
-```bash
-docker tag <ten-cua-ban>-api:v1 <dia-chi-harbor>/<project-name>/<ten-cua-ban>-api:v1
-```
-- Đẩy image lên kho lưu trữ:
-```bash
-docker push <dia-chi-harbor>/<project-name>/<ten-cua-ban>-api:v1
-```
+*(Giải thích: `--interval` kiểm tra mỗi 30 giây. `--timeout` chờ tối đa 3 giây. `--retries` thử 3 lần liên tiếp trước khi đánh dấu `unhealthy`. Container unhealthy sẽ được Docker Compose hoặc K8s tự động restart).*
+
+Sau khi thực hành xong, cập nhật Dockerfile của bạn ở Bước 2 để áp dụng các kỹ thuật tối ưu này.
 
 **Bước 9: Nộp bài (Output đánh giá)**
 
 > [!IMPORTANT]
-> **Yêu cầu bắt buộc để qua bài:** Bạn phải viết được Dockerfile multi-stage cho 1 app thật (như bài tập ở Bước 5), build thành công image và push thành công lên Harbor.
+> **Yêu cầu bắt buộc để qua bài:** Bạn phải viết được `Dockerfile multi-stage` cho 1 app thật, build thành công image (kích thước tối ưu) và push thành công lên dự án của bạn trên Harbor. Giao diện Harbor phải hiển thị image của bạn kèm kết quả quét bảo mật (Scanning).
 
-- Lưu tất cả các lệnh nháp bạn gõ thành công vào file `docker-notes.md`.
-- Commit toàn bộ folder cá nhân bao gồm mã nguồn ứng dụng, `Dockerfile`, `docker-compose.yml`, `docker-notes.md`.
-- Chụp 2 bức ảnh: (1) Trình duyệt hiển thị web chạy từ docker-compose, (2) Giao diện Harbor hiển thị image bạn vừa push lên. Lưu ảnh vào Git.
-- Push lên nhánh cá nhân và tạo Pull Request (PR) chờ Review.
+- Commit `Dockerfile` và file `docker-compose.yml` lên nhánh cá nhân.
+- Tạo Pull Request và nhờ mentor/leader review cấu trúc Dockerfile của bạn.
