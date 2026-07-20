@@ -1,0 +1,13 @@
+Filesystem                         Size  Used Avail Use% Mounted on
+tmpfs                              588M  1.5M  587M   1% /run
+/dev/mapper/ubuntu--vg-ubuntu--lv   38G  6.7G   29G  19% /
+tmpfs                              2.9G     0  2.9G   0% /dev/shm
+tmpfs                              5.0M     0  5.0M   0% /run/lock
+/dev/sda2                          2.0G  104M  1.7G   6% /boot
+tmpfs                              588M   12K  588M   1% /run/user/1000
+\n
+               total        used        free      shared  buff/cache   available
+Mem:            5878         495        5256           1         360        5382
+Swap:           4095           0        4095
+\n
+Linux mainserver 6.8.0-124-generic #124-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 13:00:45 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
