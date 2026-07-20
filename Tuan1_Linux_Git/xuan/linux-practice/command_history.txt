@@ -1,0 +1,106 @@
+    1  pwd
+    2  lsblk
+    3  sudo lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv -r
+    4  lsblk
+    5  df -h
+    6  sudo poweroff
+    7  history
+    8  pwd
+    9  mkdir Projects
+   10  cd Projects/
+   11  git clone git@github.com:Brauuwu/DevOps_Intern_Tinasoft.git
+   12  cd Projects/
+   13  git clone git@github.com:Brauuwu/DevOps_Intern_Tinasoft.git
+   14  ls
+   15  cd DevOps_Intern_Tinasoft/
+   16  branch
+   17  git branch
+   18  git checkout -b xuan/tuan1-linux-git
+   19  ls
+   20  cd Tuan1_Linux_Git/
+   21  mkdir xuan
+   22  ls
+   23  cd xuan/
+   24  mkdir linux-practice
+   25  cd linux-practice/
+   26  pwd
+   27  ls -la
+   28  touch file_moi.txt
+   29  cp file_moi.txt file_copy.txt
+   30  ls
+   31  mv file_copy.txt  file_rename.txt
+   32  ls
+   33  rm file_moi.txt 
+   34  echo "Chao mung den voi lop hoc DevOps" > text.txt
+   35  vim text.txt 
+   36  less text.txt 
+   37  grep "DevOps" text.txt 
+   38  chmod 400 text.txt 
+   39  echo "CHeck" >> text.txt 
+   40  chmod 644 text.txt 
+   41  echo "Check" > text.txt 
+   42  less text.txt 
+   43  chmod u+x script.sh
+   44  ls -la text.txt 
+   45  sudo chown root:root text.txt 
+   46  ls -la text.txt 
+   47  sudo chown $(whoami):$(whoami) text.txt 
+   48  ls -la text.txt 
+   49  chmod u+x text.txt 
+   50  ls -la text.txt 
+   51  chmod g+w text.txt 
+   52  ls -la text.txt 
+   53  umask 0077
+   54  touch file_strict.txt
+   55  ls -la file_strict.txt 
+   56  umask 0022
+   57  sudo -l
+   58  groups
+   59  id
+   60  sudo su -
+   61  mkdir -p project/{src,config,logs}
+   62  ls
+   63  cd project/
+   64  chmod 755 src/
+   65  chmod 750 config/
+   66  chmod 700 logs/
+   67  cs ...
+   68  cd ..
+   69  ls -la project/
+   70  ip a
+   71  ip -4 addr show
+   72  ip route show
+   73  ping -c 8.8.8.8
+   74  ping -c 4 8.8.8.8
+   75  traceroute 8.8.8.8
+   76  mtr -c 10 8.8.8.8
+   77  nslookup google.com
+   78  dig google.com
+   79  less /etc/resolv.conf 
+   80  ss -tlpn
+   81  ss -tlpn | grep 8080
+   82  curl -I https://google.com
+   83  curl -s https://api.github.com | head -20
+   84  curl -s --connect-timeout 5 --max-time 10 http://localhost:8080/health
+   85  nc -zv google.com 443
+   86  sudo ufw status verbose
+   87  sudo ufw allow 22/tcp
+   88  sudp ufw allow 80/tcp
+   89  sudo ufw allow 80/tcp
+   90  sudo ufw status numbered
+   91  {echo "=== NETWORK INTERFACES ==="\}
+   92  touch network_report.txt
+   93  echo "=== NETWORK INTERFACES ===" > network_report.txt 
+   94  ip -4 addr show >> network_report.txt 
+   95  less network_report.txt 
+   96  echo "=== ROUTING TABLE ===" >> network_report.txt; ip route show >> network_report.txt ;echo "=== DNS CONFIG ===" >> network_report.txt ; 
+   97  cat /etc/resolv.conf >> network_report.txt 
+   98  less network_report.txt 
+   99  echo "=== LISTENING PORTS ===" >> network_report.txt; ss -tlpn >> network_report.txt ; echo "=== FIREWALL STATUS ===" >> network_report.txt 
+  100  sudo ufw status verbose 2>/dev/null || echo "UFW not installed" >> network_report.txt 
+  101  vim network_report.txt 
+  102  sudo ufw status verbose 2>/dev/null >> network_report.txt 
+  103  less network_report.txt 
+  104  top
+  105  touch command_history.txt
+  106  history >> command_history.txt 
