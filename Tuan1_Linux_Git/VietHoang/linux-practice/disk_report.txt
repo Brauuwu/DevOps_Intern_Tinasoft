@@ -1,0 +1,29 @@
+=== DISK INFO ===
+NAME                                          MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+zram0                                         251:0    0   7.1G  0 disk  [SWAP]
+nvme0n1                                       259:0    0 476.9G  0 disk  
+├─nvme0n1p1                                   259:1    0   200M  0 part  /boot/efi
+├─nvme0n1p2                                   259:2    0    16M  0 part  
+├─nvme0n1p3                                   259:3    0 275.2G  0 part  
+├─nvme0n1p4                                   259:4    0   811M  0 part  
+├─nvme0n1p5                                   259:5    0   100G  0 part  
+├─nvme0n1p6                                   259:6    0     2G  0 part  /boot
+└─nvme0n1p7                                   259:7    0    98G  0 part  
+  └─luks-4313f6e0-976f-4baa-9d4f-182ac6317e94 252:0    0    98G  0 crypt /home
+                                                                         /
+=== USAGE ===
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/dm-0        98G   25G   73G  26% /
+devtmpfs        3.6G     0  3.6G   0% /dev
+tmpfs           3.6G   92K  3.6G   1% /dev/shm
+efivarfs        128K   49K   75K  40% /sys/firmware/efi/efivars
+tmpfs           1.5G  2.0M  1.5G   1% /run
+none            1.0M     0  1.0M   0% /run/credentials/systemd-cryptsetup@luks\x2d4313f6e0\x2d976f\x2d4baa\x2d9d4f\x2d182ac6317e94.service
+none            1.0M     0  1.0M   0% /run/credentials/systemd-journald.service
+none            1.0M     0  1.0M   0% /run/credentials/systemd-resolved.service
+/dev/dm-0        98G   25G   73G  26% /home
+tmpfs           3.6G  5.6M  3.6G   1% /tmp
+/dev/nvme0n1p6  2.0G  600M  1.2G  33% /boot
+/dev/nvme0n1p1  196M   69M  128M  35% /boot/efi
+tmpfs           733M   68M  665M  10% /run/user/1000
+tmpfs           733M   44K  733M   1% /run/user/0

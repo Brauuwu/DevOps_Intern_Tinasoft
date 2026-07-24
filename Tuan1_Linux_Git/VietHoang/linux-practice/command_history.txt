@@ -1,0 +1,295 @@
+    1  sudo dnf update
+    2  sudo dnf install mysql-workbench
+    3  sudo dnf check-update
+    4  sudo dnf install mysql-workbench-community
+    5  sudo dnf install flatpak
+    6  flatpak install flathub com.mysql.Workbench
+    7  sudo dnf update
+    8  sudo dnf install https://dev.mysql.com/get/mysql80-community-release-fc40-1.noarch.rpm
+    9  sudo dnf install https://dev.mysql.com/get/mysql80-community-release-fc43-1.noarch.rpm
+   10  sudo dnf install mysql-community-server
+   11  sudo systemctl start mysqld
+   12  sudo systemctl enable mysqld
+   13  sudo grep 'temporary password' /var/log/mysqld.log
+   14  sudo mysql_secure_installation
+   15  mysql -u root -p
+   16  mysqladmin -u root -p password "200220"
+   17  mysql -u root -p
+   18  sudo grep 'temporary password' /var/log/mysqld.log
+   19  sudo dnf install mysql-workbench-community
+   20  dnf list available | grep mysql-workbench
+   21  sudo dnf install flatpak
+   22  flatpak install flathub com.mysql.Workbench
+   23  sudo dnf install flatpak
+   24  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+   25  flatpak install flathub com.mysql.Workbench
+   26  sudo dnf localinstall mysql-workbench-community-8.0.46-1.el9.x86_64.rpm
+   27  flatpak install flathub com.mysql.Workbench
+   28  sudo dnf install ./mysql-workbench-community-8.0.46-1.el9.x86_64.rpm
+   29  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+   30  flatpak install flathub com.mysql.Workbench
+   31  sudo dnf install dbeaver-ce
+   32  git clone https://github.com/slueon/BaiDoXe.git
+   33  rum
+   34  run
+   35  sudo dnf install java-17-openjdk-devel
+   36  java -version
+   37  sudo dnf install java-17-openjdk-devel
+   38  java -version
+   39  echo $JAVA_HOME
+   40  java version
+   41  sudo dnf install java-17-openjdk-devel
+   42  sudo dnf install ibus-bamboo
+   43  yum install temurin-21-jdk
+   44   /usr/bin/env /home/shinrax/.vscode/extensions/redhat.java-1.53.0-linux-x64/jre/21.0.10-linux-x86_64/bin/java @/tmp/cp_886wcjgcvx5z1js2fle8xw7xb.argfile com.baidoxe.parking_iot.ParkingIotApplication 
+   45   cd /home/shinrax/BaiDoXe ; /usr/bin/env /home/shinrax/.vscode/extensions/redhat.java-1.53.0-linux-x64/jre/21.0.10-linux-x86_64/bin/java @/tmp/cp_886wcjgcvx5z1js2fle8xw7xb.argfile com.baidoxe.parking_iot.ParkingIotApplication 
+   46  sudo dnf install gnome-extensions-app
+   47  sudo dnf install gnome-shell-extension-dash-to-dock
+   48   /usr/bin/env /home/shinrax/.vscode/extensions/redhat.java-1.53.0-linux-x64/jre/21.0.10-linux-x86_64/bin/java @/tmp/cp_886wcjgcvx5z1js2fle8xw7xb.argfile com.baidoxe.parking_iot.ParkingIotApplication 
+   49  git clone https://github.com/slueon/BaiDoXe.git
+   50   /usr/bin/env /home/shinrax/.vscode/extensions/redhat.java-1.54.0-linux-x64/jre/21.0.10-linux-x86_64/bin/java @/tmp/cp_3j9v81dwa0ee0ias53cm3vqnj.argfile com.baidoxe.parking_iot.ParkingIotApplication 
+   51  git clone https://github.com/ThanhChungPtit/HeThongCamBien.git
+   52  python3 --version
+   53  sudo dnf install android-tools
+   54  adb devices
+   55  adb sideload '/home/shinrax/Downloads/garnet-ota_full-OS3.0.304.0.WNRCNXM-user-16.0-d0e642461d.zip' 
+   56  adb kill-server
+   57  adb start-server
+   58  adb devices
+   59  adb sideload ~/Downloads/garnet-ota_full-OS3.0.304.0.WNRCNXM-user-16.0-d0e642461d.zip
+   60  adb devices
+   61  sudo adb sideload '/home/shinrax/Downloads/garnet-ota_full-OS3.0.304.0.WNRCNXM-user-16.0-d0e642461d.zip'
+   62  adb devices
+   63  adb sideload '/home/shinrax/Downloads/garnet-ota_full-OS3.0.304.0.WNRCNXM-user-16.0-d0e642461d.zip'
+   64  /usr/bin/python /home/shinrax/pythonbdx/generate_data.py
+   65  /usr/bin/python /home/shinrax/pythonbdx/train_model.py
+   66  pip install pandas scikit-learn xgboost opencv-python scikit-image tensorflow matplotlib seaborn
+   67  train_model.py
+   68  python3 train_model.py
+   69  /usr/bin/python /home/shinrax/pythonbdx/train_model.py
+   70  python3 -m http.server 8080
+   71  sudo dnf install gnome-extensions-app
+   72  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepoflatpak install flathub com.wps.Office
+   73  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+   74  flatpak install flathub com.wps.Office
+   75  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+   76  flatpak install flathub org.projectlibre.ProjectLibre
+   77  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+   78  cd ~/Downloads
+   79  sudo dnf localinstall projectlibre-1.9.8-2.x86_64.rpm
+   80  sudo dnf install ./projectlibre-1.9.8-2.x86_64.rpm
+   81  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+   82  flatpak install flathub org.projectlibre.ProjectLibre
+   83  sudo dnf install ./projectlibre-1.9.8-2.x86_64.rpm
+   84  curl -L -O https://sourceforge.net/projects/projectlibre/files/ProjectLibre/1.9.3/projectlibre-1.9.3.tar.gz
+   85  tar -xzf projectlibre-1.9.3.tar.gz
+   86  cd projectlibre-1.9.3
+   87  ./projectlibre.sh
+   88  cd ~/Downloads
+   89  sudo dnf install ./projectlibre-1.9.8-2.x86_64.rpm --setopt=strict=0
+   90  powercfg/batteryreport
+   91  sudo dnf update
+   92  sudo dnf install gcc git curl perl wget make cmake sassc wmctrlgnome-tweaks flatpak fastfetch htop duf
+   93  sudo dnf install gcc perl make cmake sassc wmctrl gnome-tweaks fastfetch htop duf
+   94  sudo dnf config-manager set disabled mysql84-community mysql-connectors-community mysql-tools-84-community
+   95  sudo dnf config-manager --disable mysql84-community mysql-connectors-community mysql-tools-84-community
+   96  sudo dnf install gcc perl make cmake sassc wmctrl gnome-tweaks fastfetch htop duf
+   97  cd
+   98  flatpak install flathub com.mattjakeman.ExtensionManager
+   99  sudo dnf install timeshift -y
+  100  sudo dnf install ulauncher
+  101  sudo dnf remove ulauncher
+  102  rm -rf ~/.config/ulauncher ~/.local/share/ulauncher
+  103  sudo dnf install ulauncher
+  104  git clone https://github.com/vinceliuice/WhiteSur-icon-theme.git
+  105  cd WhiteSur-icon-theme/
+  106  ls *sh
+  107  ./install.sh -a
+  108  cd
+  109  sudo dnf remove extension-manager
+  110  flatpak install flathub com.mattjakeman.ExtensionManager
+  111  rm -rf ~/.cache/extension-manager
+  112  rm -rf ~/.config/extension-manager
+  113  git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1
+  114  cd Mactahoe-gtk-theme/
+  115  cd MacTahoe-gtk-theme
+  116  ls *sh
+  117  ./install.sh --help
+  118  ls *sh
+  119  sudo ./tweaks.sh
+  120  sudo ./tweak.sh -g -nd -b ~/Pictures/snow-mountain.jpg
+  121  ls *sh
+  122  ./install.sh -n MacTahoe -t all -l --shell -i simple -h bigger --round
+  123  cd
+  124  sudo flatpak override --filesystem=xdg-config/gtk-3.0
+  125  sudo flatpak override --filesystem=xdg-config/gtk-4.0
+  126  ls *sh
+  127  sudo ./tweaks.sh -g -nd -b ~/Pictures/snow-mountain.jpg
+  128  sudo ./tweaks.sh -g -nd -b /home/shinrax/Pictures/snow-mountain.jpg
+  129  ./tweaks.sh -F
+  130  sudo dnf update
+  131  cd
+  132  sudo dnf update
+  133  sudo dnf upgrade
+  134  pwd
+  135  whoami
+  136   cd /
+  137  cd /var
+  138  cd log
+  139  cd ..
+  140  cd
+  141  clear
+  142  ls var
+  143  ls /
+  144  ls /var
+  145  ls /cache
+  146  ls -/var
+  147  ls -l /var
+  148  clear
+  149  ls /var
+  150  ls /acc
+  151  ls -a /
+  152  ls /
+  153  ls -t /
+  154  ls -lta /
+  155  clear
+  156  mkdir data
+  157  ls 
+  158  cd data
+  159  ls /data
+  160  cd
+  161  touch data/data.txt
+  162  ls data
+  163  rm data/data.txt
+  164  ls data/
+  165  ls data
+  166  clear
+  167  mkdir -p data/data1/data11
+  168  ls data
+  169  ls data1
+  170  ls data/data1/
+  171  rm -r data/data1/data11/
+  172  ls data
+  173   cp data/ /tmp/
+  174  cp -r data/ / tmp/
+  175  cp -r data/ /tmp/
+  176  ls tmp
+  177  ls /tmp
+  178  cd tmp
+  179  cd /tmp/
+  180  cp -r data/ /
+  181  cp -r data/ / /
+  182  clear
+  183  touch data.txt
+  184  cp data.txt /tmp/
+  185  ls tmp
+  186  ls /tmp
+  187  cd
+  188  clear
+  189  mv /tmp/data.txt data1.txt
+  190  echo "aloalo" > data1.txt
+  191  cat data1.txt
+  192  echo "alo1" > data1.txt
+  193  cat data1.txt
+  194  echo "aloalo" >> data1.txt
+  195  cat data1.txt
+  196  history
+  197  clear
+  198  tail  -n 1 data1.txt
+  199  tail -f log.txt
+  200  tail -f data.txt
+  201  tail -f data1.txt
+  202  clear
+  203  sudo apt install vim -y
+  204  sudo dnf install vim -y
+  205  clear
+  206  vi data.txt
+  207  free -m
+  208  df -h /
+  209  top
+  210  sudo hostnamectl set-hostname lab-server
+  211  sudo reboot
+  212  sudo -i
+  213  df
+  214  clear
+  215  mkdir /projects
+  216  mkdir project
+  217  cd project
+  218  npm create vite@latest
+  219  sudo dnf install nodejs22-npm-bin
+  220  npm create vite@latest
+  221  cd todols
+  222  npm install
+  223  npm run dec
+  224  npm run dev
+  225  clear
+  226  cd
+  227  clear
+  228  adduser todols
+  229  clear
+  230  sudo -i
+  231  git checkout -b <ten-cua-ban>/tuan1-linux-git
+  232  https://github.com/Brauuwu/DevOps_Intern_Tinasoft.git
+  233  git clone https://github.com/Brauuwu/DevOps_Intern_Tinasoft.git
+  234  git checkout main
+  235  cd /home/shinrax/DevOps_Intern_Tinasoft
+  236  clear
+  237  git checkout main
+  238  git pull origin main
+  239  git checkout -b VietHoang/tuan1-linux-git
+  240  cd Tuan_Linux_Git
+  241  cd Tuan1_Linux_Git
+  242  mkdir VietHoang
+  243  cd VietHoang
+  244  mkdir linux-practice
+  245  cd linux-practice
+  246  pwd
+  247  ls -la
+  248  touch file_moi.txt
+  249  cp file_moi.txt file_copy.txt
+  250  mv file_copy.txt file_rename.txt
+  251  rm file_moi.txt
+  252  clear
+  253  echo "Chao mung den voi lop hoc DevOps" > text.txt
+  254  nano text.txt
+  255  cat text.txt
+  256  grep "DevOps" text.txt
+  257  clear
+  258  chmod 400 text.txt
+  259  echo "Text" >> text.txt
+  260  chmod 644 text.txt
+  261  sudo chown root:root text.txt
+  262  ls -la text.txt
+  263  sudo chown $(whoami):$(whoami) text.txt
+  264  ls -la
+  265  umask
+  266  touch file_default.txt
+  267  umask 077
+  268  touch file_strict.txt
+  269  ls -la file_strict.txt
+  270  umask 022
+  271  ls -la file_strict.txt
+  272  ls -la file_default.txt
+  273  mkdir -p project/{src,config,logs}
+  274  chmod 755 project/scr
+  275  chmod 755 project/src
+  276  chmod 750 project/config
+  277  chmod 700 project/logs
+  278  clear
+  279  echo "=== NETWORK INTERFACES ==="
+  280  ip -4 addr show
+  281  echo ""
+  282  echo "=== ROUTING TABLE ==="
+  283  ip route show
+  284  echo ""
+  285  echo "=== DNS CONFIG ==="
+  286  cat /etc/resolv.conf
+  287  echo ""
+  288  echo "=== LISTENING PORTS ==="
+  289  ss -tlnp
+  290  echo ""
+  291  echo "=== FIREWALL STATUS ==="
+  292  sudo ufw status verbose 2>/dev/null || echo "UFW not installed"
+  293  clear
+  294  {   echo "=== NETWORK INTERFACES ===";   ip -4 addr show;   echo "";   echo "=== ROUTING TABLE ===";   ip route show;   echo "";   echo "=== DNS CONFIG ===";   cat /etc/resolv.conf;   echo "";   echo "=== LISTENING PORTS ===";   ss -tlnp;   echo "";   echo "=== FIREWALL STATUS ===";   sudo ufw status verbose 2>/dev/null || echo "UFW not installed"; } > ../network_report.txt
+  295  history > ../command_history.txt
